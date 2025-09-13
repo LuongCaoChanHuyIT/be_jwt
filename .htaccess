@@ -1,0 +1,7 @@
+RewriteEngine On
+RewriteBase /be_jwt/
+
+# Nếu file hoặc folder không tồn tại thì redirect về index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L]
