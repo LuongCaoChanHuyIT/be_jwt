@@ -5,5 +5,5 @@ $router->add('GET', '/', function () { echo json_encode(['message' => 'API is ru
 
 $router->add('GET', '/users', [UserController::class, 'getAll']);
 $router->add('POST', '/users/register', [UserController::class, 'register']);
-
+$router->add('POST', '/users/login', [UserController::class, 'login']);
 ?>

@@ -12,6 +12,26 @@ class User
         $this->db = $database->getConnection();
     }
 
+    public function login($email, $password)
+    {
+        try {
+            $sql = "SELECT * FROM {$this->table} WHERE email = :email";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([':email' => $email]);
+            $user = $stmt->fetch();
+            if ($user && password_verify($password, $user->password)) {
+                unset($user->password); // remove password from user data
+                return $user;
+            } else {
+                throw new Exception("Invalid email or password");
+            }
+        } catch (PDOException $e) {
+             if ($e->getCode() == 23000) {
+                throw new Exception("Invalid email or password");
+            }
+            throw new Exception("Database error: " . $e->getMessage());
+        }
+    }
 
     public function create($name, $email, $password)
     {

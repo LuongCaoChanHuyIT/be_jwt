@@ -46,4 +46,20 @@ class UserController
         }
     }
 
+    public function login($res)
+    {
+        try {
+            $data = $this->userModel->login($res['email'], $res['password']);
+            sendResponse([
+                'success' => true,
+                'message' => 'Login successfully',
+                'data'    => $data
+            ]);
+        } catch (Exception $e) {
+            sendResponse([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 200);
+        }
+    }
 }
