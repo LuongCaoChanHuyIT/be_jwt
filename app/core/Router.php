@@ -16,9 +16,17 @@ class Router {
                 if (is_callable($route['handler'])) {
                     return call_user_func($route['handler']);
                 }
+
                 if (is_array($route['handler'])) {
                     [$controller, $action] = $route['handler'];
-                    return call_user_func([new $controller, $action]);
+                    $controllerInstance = new $controller();
+
+                    if (in_array($method, ['POST', 'PUT'])) {
+                        $data = json_decode(file_get_contents("php://input"), true);
+                        return call_user_func([$controllerInstance, $action], $data);
+                    }
+
+                    return call_user_func([$controllerInstance, $action]);
                 }
             }
         }

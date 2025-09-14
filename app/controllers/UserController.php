@@ -13,11 +13,37 @@ class UserController
 
     public function getAll()
     {
-        $data = $this->userModel->getAll();
-        sendResponse([
-            'success' => true,
-            'data' => $data,
-            'message' => 'Users retrieved successfully'
-        ]);
+        try {
+            $data = $this->userModel->read();
+            sendResponse([
+                'success' => true,
+                'data' => $data,
+                'message' => 'Users retrieved successfully'
+            ]);
+        } catch (Exception $e) {
+            sendResponse([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ]);
+            return;
+        }
     }
+
+    public function register($res)
+    {
+        try {
+            $data = $this->userModel->create($res['name'], $res['email'], $res['password']);
+            sendResponse([
+                'success' => true,
+                'message' => 'Register user',
+                'data'    => $data
+            ]);
+        } catch (Exception $e) {
+            sendResponse([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 200); // ép status code = 200
+        }
+    }
+
 }
